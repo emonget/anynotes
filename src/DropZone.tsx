@@ -1,7 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Settings, Trash2 } from 'lucide-react';
 import { AnimatePresence } from 'framer-motion';
 import { EditPanel } from './UI/EditPanel';
+import { DropdownMenu } from './UI/DropdownMenu';
+import { BookmarkList } from './UI/BookmarkList';
+import { InstallBanner } from './UI/InstallBanner';
 
 export type BookmarkState = 'unsorted' | 'manual' | 'auto';
 
@@ -169,6 +171,20 @@ export const DropZone = () => {
     saveBookmarks(newBookmarks);
   };
 
+  const handleSelectBookmark = (bookmark: Bookmark, index: number) => {
+    setSelectedBookmark({
+      ...bookmark,
+      id: String(index),
+      categories: {
+        topics: bookmark.categories?.topics || [],
+        project: bookmark.categories?.project,
+        sourceType: bookmark.categories?.sourceType,
+        importance: bookmark.categories?.importance,
+      },
+    });
+    setIsPanelOpen(true);
+  };
+
   const handleClearData = () => {
     if (window.confirm('Are you sure you want to clear all data? This action cannot be undone.')) {
       localStorage.removeItem('bookmarks');
@@ -184,135 +200,24 @@ export const DropZone = () => {
       <div className="font-sans max-w-3xl mx-auto mt-8 px-4 text-gray-800">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-blue-600 text-3xl font-bold">DropZone</h1>
-        <div className="relative">
-          <button
-            onClick={() => setShowConfig(!showConfig)}
-            className="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded inline-flex items-center"
-            title="Settings"
-          >
-            <Settings className="w-4 h-4" />
-          </button>
-          {showConfig && (
-            <div className="absolute right-0 mt-2 w-48 bg-white rounded-md overflow-hidden shadow-xl z-10">
-              <label
-                htmlFor="importFile"
-                className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
-              >
-                Import Bookmarks
-              </label>
-              <input
-                type="file"
-                id="importFile"
-                accept=".json"
-                onChange={handleImport}
-                className="hidden"
-              />
-              <button
-                onClick={handleExport}
-                className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-              >
-                Export Bookmarks
-              </button>
-              <button
-                onClick={handleClearData}
-                className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-              >
-                Clear All Data
-              </button>
-              <label className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                <input
-                  type="checkbox"
-                  checked={showSaveConfirmation}
-                  onChange={(e) => {
-                    setShowSaveConfirmation(e.target.checked);
-                    localStorage.setItem('dropzone-show-save-confirmation', JSON.stringify(e.target.checked));
-                  }}
-                  className="mr-2"
-                />
-                Show save confirmation
-              </label>
-            </div>
-          )}
-        </div>
+                <DropdownMenu
+          showConfig={showConfig}
+          setShowConfig={setShowConfig}
+          handleImport={handleImport}
+          handleExport={handleExport}
+          handleClearData={handleClearData}
+          showSaveConfirmation={showSaveConfirmation}
+          setShowSaveConfirmation={setShowSaveConfirmation}
+        />
       </div>
 
-      {!isInstalled ? (
-        <>
-          <div className="bg-gray-50 p-4 rounded-md border border-gray-300 mb-8 leading-relaxed">
-            <p className="font-bold mb-2">How to install the dropzone bookmarklet:</p>
-            <ol className="list-decimal list-inside space-y-1">
-              <li>
-                Drag the button below <strong>to your bookmarks bar</strong>.
-              </li>
-              <li>
-                Start bookmarking your first site using the bookmarklet button to complete install.
-              </li>
-            </ol>
-          </div>
-          <a
-            ref={bookmarkletRef}
-            draggable={true}
-            className="select-none px-3 py-2 bg-blue-100 border border-blue-300 inline-block cursor-pointer no-underline text-blue-600 font-bold rounded mb-4 hover:bg-blue-200"
-            title="Drag this link to your bookmarks bar"
-          >
-            Save to dropzone
-          </a>
-        </>
-      ) : (
-        <div className="bg-gray-50 p-4 rounded-md border border-gray-300 mb-8 leading-relaxed">
-          <p className="text-center text-gray-600">
-            Use the bookmarklet button from any page to save it here.
-          </p>
-        </div>
-      )}
+      <InstallBanner isInstalled={isInstalled} bookmarkletRef={bookmarkletRef} />
 
-      <h2 className="text-blue-600 text-2xl font-bold mb-4">Saved bookmarks</h2>
-      <ul className="list-none p-0">
-        {bookmarks.length === 0 ? (
-          <li>No bookmarks saved yet.</li>
-        ) : (
-          bookmarks.map((bookmark, index) => (
-            <li 
-              key={index} 
-              className="flex justify-between items-center mb-3 border-b border-gray-200 pb-2 cursor-pointer hover:bg-gray-50"
-              onClick={() => {
-                setSelectedBookmark({
-                  ...bookmark,
-                  id: String(index),
-                  categories: {
-                    topics: bookmark.categories?.topics || [],
-                    project: bookmark.categories?.project,
-                    sourceType: bookmark.categories?.sourceType,
-                    importance: bookmark.categories?.importance
-                  }
-                });
-                setIsPanelOpen(true);
-              }}
-            >
-              <div>
-                <a
-                  href={bookmark.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="no-underline text-blue-600 font-semibold"
-                >
-                  {bookmark.title}
-                </a>
-                <small className="text-gray-600 ml-2 font-normal">
-                  (saved at {new Date(bookmark.savedAt).toLocaleString()})
-                </small>
-              </div>
-              <button
-                onClick={() => handleDelete(index)}
-                className="text-gray-400 hover:text-gray-600"
-                title="Delete bookmark"
-              >
-                <Trash2 className="w-5 h-5" />
-              </button>
-            </li>
-          ))
-        )}
-      </ul>
+            <BookmarkList
+        bookmarks={bookmarks}
+        handleDelete={handleDelete}
+        onSelectBookmark={handleSelectBookmark}
+      />
 
     </div>
     <AnimatePresence>
