@@ -80,10 +80,10 @@ will propose various options for copying data:
 ║        [💾 Save]      [🗙 Discard]        ║
 ╚══════════════════════════════════════════╝
 
-## ItemDetailsPanel
+## EditPanel
 **component**
 
-[ItemDetails.tsx](/src/UI/ItemDetailsPanel.tsx)
+[EditPanel.tsx](/src/UI/EditPanel.tsx)
 
 **purpose**
 
@@ -91,12 +91,41 @@ seeing and editing [ItemFields](app.md#data-model) of current selected item
 
 **behavior**
 
-- should appear anytime user select an item from bookmark list
-- if unset in local storage field should show empty value or default
-- updated fields will be saved to local storage once user save changes
-- any field updated by user will update corresponding field in local storage once user save changes
-- any updated fields other than `state` will automatically set `state` field to `SortingState.Manual`
+- Appears when a user selects a bookmark from the list
+- Remains open and updates its content when another item is selected, improving workflow for multiple edits.
+- If a field is unset in local storage, it shows an empty or default value.
+- The editable state of fields is determined by the [data model](model.md#main-fields).
+- Non-editable fields (Title, URL, Saved At) are grouped under a "Page" section and use in-field icons for a cleaner look.
+- Any user-updated field (other than `state`) automatically sets the item's `state` to `manual`.
+
+**actions**
+- **Undo button**: Reverts any modifications back to their original state. This button is disabled if there are no pending changes.
+- **Save Changes button**: Persists all edited fields to local storage. This button is also disabled when there are no changes to save.
 
 **layout**
 
-***insert ASCII art layout proposal here***
+╔══════════════════════════════════════════╗
+║ Edit Bookmark                        [X] ║
+╟──────────────────────────────────────────╢
+║ ▼ Page                                   ║
+║ │ [FileText] Title Text Here             │
+║ │ [Globe]    https://example.com         │
+║ │ [Calendar] 1/1/2025, 12:00:00 PM       │
+║                                          ║
+║ ▼ Topics                                 ║
+║ │ +------------------------------------+ │
+║ │ | [tag1] x  [tag2] x                 | │
+║ │ | Add topic (press enter)            | │
+║ │ +------------------------------------+ │
+║                                          ║
+║ ▼ Project                                ║
+║ │ [Project Name Here                ]    │
+║                                          ║
+║ ▼ Source Type                            ║
+║ │ [Select type                  ] [v]    │
+║                                          ║
+║ ▼ Importance                             ║
+║ │ [Select importance            ] [v]    │
+╟──────────────────────────────────────────╢
+║                [ Undo ] [ Save Changes ] ║
+╚══════════════════════════════════════════╝

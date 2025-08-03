@@ -27,9 +27,8 @@ Setting user defined categories as speced in [sorting categories fields](model.m
 
 
 ## Edit
-Viewing, editing selected item's data,
+Allows viewing and editing the data of a selected item through the [item view/edit panel](ui.md#itemdetailspanel).
 
-[item view/edit panel](ui.md#itemdetailspanel)
 
 ## Query
 Querying specific items

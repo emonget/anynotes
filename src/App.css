@@ -1,0 +1,29 @@
+/* Edit Panel Styles */
+.react-tags {
+  min-height: 2.5rem;
+  padding: 0.5rem 0;
+}
+
+.react-tag {
+  display: inline-flex;
+  align-items: center;
+  background-color: #eff6ff;
+  color: #1d4ed8;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  margin-right: 0.5rem;
+  font-size: 0.875rem;
+}
+
+.react-tag-remove {
+  margin-left: 0.25rem;
+  color: #3b82f6;
+  cursor: pointer;
+}
+
+.react-tags-input input {
+  border: none;
+  outline: none;
+  width: 100%;
+  padding: 0.5rem;
+}

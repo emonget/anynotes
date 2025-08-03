@@ -1,13 +1,27 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Settings, Trash2 } from 'lucide-react';
+import { AnimatePresence } from 'framer-motion';
+import { EditPanel } from './UI/EditPanel';
 
-interface Bookmark {
+export type BookmarkState = 'unsorted' | 'manual' | 'auto';
+
+export interface Bookmark {
+  id?: string;
   title: string;
   url: string;
   savedAt: string;
+  categories: {
+    topics: string[];
+    project?: string;
+    sourceType?: 'Blog'|'Article'|'Tool'|'Other';
+    importance?: 'low'|'medium'|'high';
+  };
+  state: BookmarkState;
 }
 
 export const DropZone = () => {
+  const [isPanelOpen, setIsPanelOpen] = useState(false);
+  const [selectedBookmark, setSelectedBookmark] = useState<Bookmark | null>(null);
   const [bookmarks, setBookmarks] = useState<Bookmark[]>([]);
   const [isInstalled, setIsInstalled] = useState(false);
   const [showConfig, setShowConfig] = useState(false);
@@ -166,7 +180,8 @@ export const DropZone = () => {
   };
 
   return (
-    <div className="font-sans max-w-3xl mx-auto mt-8 px-4 text-gray-800">
+    <>
+      <div className="font-sans max-w-3xl mx-auto mt-8 px-4 text-gray-800">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-blue-600 text-3xl font-bold">DropZone</h1>
         <div className="relative">
@@ -257,7 +272,23 @@ export const DropZone = () => {
           <li>No bookmarks saved yet.</li>
         ) : (
           bookmarks.map((bookmark, index) => (
-            <li key={index} className="flex justify-between items-center mb-3 border-b border-gray-200 pb-2">
+            <li 
+              key={index} 
+              className="flex justify-between items-center mb-3 border-b border-gray-200 pb-2 cursor-pointer hover:bg-gray-50"
+              onClick={() => {
+                setSelectedBookmark({
+                  ...bookmark,
+                  id: String(index),
+                  categories: {
+                    topics: bookmark.categories?.topics || [],
+                    project: bookmark.categories?.project,
+                    sourceType: bookmark.categories?.sourceType,
+                    importance: bookmark.categories?.importance
+                  }
+                });
+                setIsPanelOpen(true);
+              }}
+            >
               <div>
                 <a
                   href={bookmark.url}
@@ -284,5 +315,28 @@ export const DropZone = () => {
       </ul>
 
     </div>
+    <AnimatePresence>
+      {isPanelOpen && selectedBookmark && (
+        <EditPanel
+          bookmark={{
+            ...selectedBookmark,
+            state: selectedBookmark.state || 'manual'
+          }}
+          onClose={() => setIsPanelOpen(false)}
+          onSave={(updated) => {
+            if (!updated.id) return;
+            const updatedBookmarks = [...bookmarks];
+            const index = parseInt(updated.id, 10);
+            if (!isNaN(index) && index >= 0 && index < updatedBookmarks.length) {
+              const { id, ...bookmarkToSave } = updated;
+              updatedBookmarks[index] = bookmarkToSave;
+            }
+            saveBookmarks(updatedBookmarks);
+            setSelectedBookmark(null);
+          }}
+        />
+      )}
+    </AnimatePresence>
+    </>
   );
 };

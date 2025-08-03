@@ -27,6 +27,6 @@
 **sorting categories**
 - [ ] (`plan`) based on specified [sorting criteria](specs/app.md#sorting-criteria) describe how new data model will look like for items stored in local storage
 - [ ] (`plan`) draft [AdminPanel](specs/ui.md#adminpanel) UI
-- [ ] (`plan`) draft [ItemDetailsPanel](specs/ui.md#itemdetails)
+- [x] (`plan`) draft [EditPanel](specs/ui.md#editpanel)
 - [ ] proceed with [AdminPanel](specs/ui.md#adminpanel) implementation
-- [ ] proceed with [ItemDetails](specs/ui.md#itemdetails) component
+- [x] proceed with [EditPanel](specs/ui.md#editpanel) component
