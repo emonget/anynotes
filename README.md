@@ -1,6 +1,6 @@
 # AnyDrop - Bookmarks Receiver, Random Pages Saver
 ## Docs
 
-- [tasks](/docs/plan.md)
+- [tasks](/docs/tasks.md)
 - [roadmap](/docs/roadmap.md)
 - [specs](/docs/specs/index.md)

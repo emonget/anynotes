@@ -23,3 +23,7 @@ dist-ssr
 *.sln
 *.sw?
 .draft.md
+
+# Custom
+.discarded/
+guidelines.md

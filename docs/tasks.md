@@ -1,9 +1,5 @@
 ***DISCLAIMER***
-```
-- Do not perform all remaining task in a row but only ones scoped within conversation, If in doubt ask if you should proceeed with remaining task 
-- Tasks marked (`plan`) require discussion or approval before proceeding
-- For any task involving drafting UI, make proposal first and eventually update file with ASCII representation of user agree
-```
+read common [guidelines and conventions](/guidelines.md) before starting
 
 # Tasks
 **layout**
@@ -25,8 +21,8 @@
 - [x] allow items to be deleted
 
 **sorting categories**
-- [ ] (`plan`) based on specified [sorting criteria](specs/app.md#sorting-criteria) describe how new data model will look like for items stored in local storage
-- [ ] (`plan`) draft [AdminPanel](specs/ui.md#adminpanel) UI
-- [x] (`plan`) draft [EditPanel](specs/ui.md#editpanel)
-- [ ] proceed with [AdminPanel](specs/ui.md#adminpanel) implementation
-- [x] proceed with [EditPanel](specs/ui.md#editpanel) component
+- [ ] (`plan`) based on specified [page fields](specs/model.md#page) describe how data will be stored in [local storage](specs/model.md#local-storage-json-format)
+- [x] (`plan`) draft [EditSidePanel](specs/ui.md#editsidepanel)
+- [x] proceed with [EditSidePanel](specs/ui.md#editsidepanel) component
+> next
+- [ ] [EditSidePanel](specs/ui.md#editsidepanel): allow configure **user-defined** [categories](specs/model.md#categories). 

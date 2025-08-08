@@ -8,44 +8,10 @@ enum Level {
 }
 ```
 
-# Page
+# Categories
 
 ```typescript
-
-type PageCategories = Record<PageCategory, string>
-
-type Page = {
-  id: string          // non-editable
-  title: string       // non-editable
-  url: string         // non-editable
-  savedAt: string     // non-editable
-  categories: PageCategories
-  groupId: string   // group several items 
-  state: SortingState
-}
-```
-
-## Id
-
-## Title
-
-## Link/url
-
-## Date
-
-## State
-```typescript
-enum SortingState {
-    Unsorted,
-    Manual,
-    Auto
-}
-```
-
-## Cat
-
-```typescript
-enum PageCategory {
+enum CategoryType {
     Topic,      // user-defined
     Source,     // pre-defined
     Project,    // user-defined
@@ -54,15 +20,15 @@ enum PageCategory {
 
 } 
 
-type SortingCategoriesDef = Record<PageCategory, string[]>
+type CategoryOptions = Record<CategoryType, string[]>
 
 ```
 
-### Topic/subject**
+## Topic/subject**
 
 ***user-defined***
 
-### Source type
+## Source type
 
 ***pre-defined***
 
@@ -80,20 +46,20 @@ enum SourceType {
 }
 ```
 
-### Project
+## Project
 
 - type: ***user-defined***
 - multiple: ?
 
-### Interest/relevance
+## Interest/relevance
 - role: interest/relevance
 - type: [Level](#level)
 
-### Importance/urgency
+## Importance/urgency
 - role: importance/urgency
 - type: [Level](#level)
 
-### Purpose
+## Purpose
 
 ***predefined*** reasons for saving a specific page
 
@@ -105,10 +71,36 @@ enum Purpose {
 }
 ```
 
-### Linking/grouping
+## Linking/grouping
 
 related/similar items can be grouped together using `groupId`
 This allows for linking items: same user twitter, github, youtube channel
+
+
+# Page
+
+[categories](#categories)
+
+```typescript
+
+enum SortingState {
+    Unsorted,
+    Manual,
+    Auto
+}
+
+type Categories = Record<CategoryType, string>
+
+type Page = {
+  id: string          // non-editable
+  title: string       // non-editable
+  url: string         // non-editable
+  savedAt: string     // non-editable
+  categories: Categories
+  groupId: string   // group several items 
+  state: SortingState
+}
+```
 
 
 # Local storage json format
