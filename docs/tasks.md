@@ -20,9 +20,17 @@ read common [guidelines and conventions](/guidelines.md) before starting
 **items**
 - [x] allow items to be deleted
 
-**sorting categories**
-- [ ] (`plan`) based on specified [page fields](specs/model.md#page) describe how data will be stored in [local storage](specs/model.md#local-storage-json-format)
+**FEAT: EditSidePanel**
+- [x] (`plan`) based on specified [page fields](specs/model.md#page) describe how data will be stored in [local storage](specs/model.md#local-storage-json-format)
 - [x] (`plan`) draft [EditSidePanel](specs/ui.md#editsidepanel)
 - [x] proceed with [EditSidePanel](specs/ui.md#editsidepanel) component
+
 > next
-- [ ] [EditSidePanel](specs/ui.md#editsidepanel): allow configure **user-defined** [categories](specs/model.md#categories). 
+**FEAT: CategoryConfModal**
+- [x] [`specs`] define how categories will be handled (string, uuid) and stored in[local-storage](specs/model.md#local-storage-json-format).
+- [x] [`specs`] specify what will happen when user add, change, or delete category option in [category management](specs/feats.md#category-management) section
+- [ ] [`impl`] update Bookmark type interface to use ID-based categories structure
+- [ ] [`impl`] implement localStorage category options management (load/save/delete)  
+- [ ] [`impl`] implement CategoryConfModal with UUID generation and localStorage integration
+- [ ] [`impl`] update EditSidePanel to display category names from IDs and integrate with localStorage
+- [ ] [`impl`] implement category deletion with bulk bookmark updates

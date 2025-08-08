@@ -20,15 +20,9 @@ This will paste date from clipboard into the app.
 
 Expected format is `JSON` so depending on source, prior to pasting, manual conversion from source format (like `CSV`) to `JSON` may be required 
 
-## Admin
-Setting user defined categories as speced in [sorting categories fields](model.md#fields)
-
-[sort admin panel](ui.md#adminpanel)
-
-
 ## Edit
 Allows viewing and editing the data of a selected item through the [item view/edit panel](ui.md#itemdetailspanel).
-
+Allow configuring [user-defined categories](#category-management)
 
 ## Query
 Querying specific items
@@ -38,6 +32,30 @@ Querying specific items
 ## Sort
 
 [sorting specs](sorting.md)
+
+## Category Management
+
+User-defined category management for [Topics and Projects](model.md#categories) through [CategoryConfModal](ui.md#category-configuration-modal).
+
+Uses ID-based references for clean operations and data integrity.
+
+### Adding Category Options
+- User adds new category option via [CategoryConfModal](ui.md#category-configuration-modal)
+- Generate UUID for new option
+- Save `{id: uuid, name: string}` to [localStorage.categoryOptions](model.md#local-storage-json-format)
+- Available immediately for bookmark categorization
+
+### Updating Category Options  
+- User renames existing category option
+- Update `name` field in [localStorage.categoryOptions](model.md#local-storage-json-format)
+- All bookmarks automatically display new name (referenced by unchanged ID)
+- No bookmark data modification required
+
+### Removing Category Options
+- User deletes category option from [CategoryConfModal](ui.md#category-configuration-modal) 
+- Remove option from [localStorage.categoryOptions](model.md#local-storage-json-format)
+- Update all bookmark items to remove deleted ID from their category arrays
+- Clean data - no orphaned ID references remain
 
 ## Backup
 Backup data:

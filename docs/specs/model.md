@@ -17,10 +17,17 @@ enum CategoryType {
     Project,    // user-defined
     Interest,   // pre-defined
     Importance, // pre-defined
-
 } 
 
-type CategoryOptions = Record<CategoryType, string[]>
+type CategoryOption = {
+    id: string;     // UUID
+    name: string;   // display name
+}
+
+type CategoryOptions = {
+    Topic: CategoryOption[];    // user-defined options
+    Project: CategoryOption[];  // user-defined options
+}
 
 ```
 
@@ -89,7 +96,12 @@ enum SortingState {
     Auto
 }
 
-type Categories = Record<CategoryType, string>
+type Categories = {
+    topics: string[];           // array of Topic IDs
+    project?: string;           // single Project ID  
+    sourceType?: string;        // enum value (not ID)
+    importance?: string;        // enum value (not ID)
+}
 
 type Page = {
   id: string          // non-editable
@@ -108,7 +120,20 @@ This fields will be stored in local storage
 
 ```json
 {
-    "bookmarks": [],    // items
+    "bookmarks": [],    // array of Page items
+    "categoryOptions": {
+        "Topic": [
+            // EXAMPLE ONLY - implementation should start with empty arrays
+            {"id": "uuid-1", "name": "Finance"},
+            {"id": "uuid-2", "name": "DIY"},
+            {"id": "uuid-3", "name": "DEV"}
+        ],
+        "Project": [
+            // EXAMPLE ONLY - implementation should start with empty arrays
+            {"id": "uuid-4", "name": "Project Alpha"},
+            {"id": "uuid-5", "name": "Personal"}
+        ]
+    },
     "sortingFields": {},   // 
     "settings": {
         "save-confirmation": true   // showing save confirmation popup inside saved page
