@@ -1,13 +1,3 @@
-# Shared, common, global
-## Level
-```typescript
-enum Level {
-    Low,
-    Mid,
-    High
-}
-```
-
 # Categories
 
 ```typescript
@@ -64,7 +54,7 @@ enum SourceType {
 
 ## Importance/urgency
 - role: importance/urgency
-- type: [Level](#level)
+- type: number (1-5 stars)
 
 ## Purpose
 
@@ -90,27 +80,27 @@ This allows for linking items: same user twitter, github, youtube channel
 
 ```typescript
 
-enum SortingState {
-    Unsorted,
-    Manual,
-    Auto
+enum MatchingState {
+    Unmatched,
+    Matched,    // auto matched categories
+    Overridden  // when user manually change auto matched categories
 }
 
 type Categories = {
     topics: string[];           // array of Topic IDs
     project?: string;           // single Project ID  
     sourceType?: string;        // enum value (not ID)
-    importance?: string;        // enum value (not ID)
+    importance?: number;        // 1-5 stars rating
 }
 
 type Page = {
   id: string          // non-editable
   title: string       // non-editable
   url: string         // non-editable
-  savedAt: string     // non-editable
+  timestamp: number   // non-editable, Unix timestamp in milliseconds
   categories: Categories
   groupId: string   // group several items 
-  state: SortingState
+  state: MatchingState
 }
 ```
 

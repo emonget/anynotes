@@ -32,7 +32,7 @@ export const BookmarkList: React.FC<BookmarkListProps> = ({ bookmarks, handleDel
                   {bookmark.title}
                 </a>
                 <small className="text-gray-600 ml-2 font-normal">
-                  (saved at {new Date(bookmark.savedAt).toLocaleString()})
+                  (saved at {new Date(bookmark.timestamp).toLocaleString()})
                 </small>
               </div>
               <button

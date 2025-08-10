@@ -89,14 +89,11 @@ will propose various options for copying data:
 ║ │ | Add topic (press enter)            | │
 ║ │ +------------------------------------+ │
 ║                                          ║
-║ ▼ Project                            ⚙ ║
-║ │ [Project Name Here                ]    │
+║ ▼ Project           [Project Name] ⚙    ║
 ║                                          ║
-║ ▼ Source Type                            ║
-║ │ [Select type                  ] [v]    │
+║ ▼ Source            [Select type  ] [v] ║
 ║                                          ║
-║ ▼ Importance                             ║
-║ │ [Select importance            ] [v]    │
+║ ▼ Importance         ☆ ☆ ☆ ☆ ☆          ║
 ╟──────────────────────────────────────────╢
 ║                [ Undo ] [ Save Changes ] ║
 ╚══════════════════════════════════════════╝
@@ -145,7 +142,7 @@ Manage available options for user-defined categories (`Topics` and `Projects`)
 ## Left Side Bar (LSB) (`draft`)
 
 Type
-- Urgent (only items with `high` importance)
+- Urgent (only items with 4-5 stars importance)
 - Relevant (only items with `high` relevance)
 
 ### Root Topics View

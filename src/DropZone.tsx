@@ -1,24 +1,28 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { AnimatePresence } from 'framer-motion';
-import { EditPanel } from './UI/EditPanel';
+import { EditSidePanel } from './UI/EditSidePanel';
 import { DropdownMenu } from './UI/DropdownMenu';
 import { BookmarkList } from './UI/BookmarkList';
 import { InstallBanner } from './UI/InstallBanner';
 
-export type BookmarkState = 'unsorted' | 'manual' | 'auto';
+export enum MatchingState {
+  Unmatched = 'Unmatched',
+  Matched = 'Matched',
+  Overridden = 'Overridden'
+}
 
 export interface Bookmark {
   id?: string;
   title: string;
   url: string;
-  savedAt: string;
+  timestamp: number;
   categories: {
     topics: string[];
     project?: string;
     sourceType?: 'Blog'|'Article'|'Tool'|'Other';
-    importance?: 'low'|'medium'|'high';
+    importance?: number; // 1-5 stars
   };
-  state: BookmarkState;
+  state: MatchingState;
 }
 
 export const DropZone = () => {
@@ -54,13 +58,26 @@ export const DropZone = () => {
     const handleMessage = (event: MessageEvent) => {
       console.log('Received message:', event);
       const data = event.data;
-      if (data && data.title && data.url && data.savedAt) {
+      if (data && data.title && data.url) {
         const stored = localStorage.getItem('bookmarks') || '[]';
         let currentBookmarks = JSON.parse(stored);
-        if (!currentBookmarks.some((b: Bookmark) => b.url === data.url && b.savedAt === data.savedAt)) {
-          currentBookmarks.push(data);
+        const timestamp = Date.now();
+        
+        if (!currentBookmarks.some((b: Bookmark) => b.url === data.url)) {
+          const bookmarkData = { 
+            ...data, 
+            timestamp,
+            categories: {
+              topics: [],
+              project: undefined,
+              sourceType: undefined,
+              importance: undefined
+            },
+            state: MatchingState.Unmatched
+          };
+          currentBookmarks.push(bookmarkData);
           saveBookmarks(currentBookmarks);
-          console.log('Saved bookmark:', data);
+          console.log('Saved bookmark:', bookmarkData);
 
           if (event.source) {
             const confirmation = localStorage.getItem('dropzone-show-save-confirmation');
@@ -111,8 +128,8 @@ export const DropZone = () => {
           if (
             imp.title &&
             imp.url &&
-            imp.savedAt &&
-            !currentBookmarks.some((b: Bookmark) => b.url === imp.url && b.savedAt === imp.savedAt)
+            imp.timestamp &&
+            !currentBookmarks.some((b: Bookmark) => b.url === imp.url && b.timestamp === imp.timestamp)
           ) {
             currentBookmarks.push(imp);
           }
@@ -135,8 +152,7 @@ export const DropZone = () => {
     const bookmarkletCode = `javascript:(() => {
     const data = {
         title: document.title,
-        url: location.href,
-        savedAt: new Date().toISOString()
+        url: location.href
     };
 
     const receiver = window.open('${dropzoneUrl}', 'dropzone-sink');
@@ -222,10 +238,10 @@ export const DropZone = () => {
     </div>
     <AnimatePresence>
       {isPanelOpen && selectedBookmark && (
-        <EditPanel
+        <EditSidePanel
           bookmark={{
             ...selectedBookmark,
-            state: selectedBookmark.state || 'manual'
+            state: selectedBookmark.state || MatchingState.Overridden
           }}
           onClose={() => setIsPanelOpen(false)}
           onSave={(updated) => {

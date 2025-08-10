@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react';
-import { X, Tag, Layers, Globe, Calendar, Bookmark as BookmarkIcon, Star, Undo, FileText, BookOpen } from 'lucide-react';
+import { X, Tag, Layers, Globe, Calendar, Bookmark as BookmarkIcon, Star, Undo, FileText, BookOpen, Settings } from 'lucide-react';
 import { WithContext as ReactTags, type Tag as ReactTag } from 'react-tag-input';
 import { motion } from 'framer-motion';
 
 import type { Bookmark } from '../DropZone';
+import { StarRating } from './StarRating';
 
-export const EditPanel = ({ bookmark, onClose, onSave }: {
+export const EditSidePanel = ({ bookmark, onClose, onSave }: {
   bookmark: Bookmark;
   onClose: () => void;
   onSave: (updated: Bookmark) => void;
@@ -56,6 +57,8 @@ export const EditPanel = ({ bookmark, onClose, onSave }: {
     }));
   };
 
+
+
   return (
     <motion.div
       initial={{ x: '100%' }}
@@ -101,7 +104,7 @@ export const EditPanel = ({ bookmark, onClose, onSave }: {
             <div className="relative">
               <Calendar className="w-5 h-5 text-gray-400 absolute top-1/2 left-3 transform -translate-y-1/2" />
               <input
-                value={new Date(edited.savedAt).toLocaleString()}
+                value={new Date(edited.timestamp).toLocaleString()}
                 className="w-full p-2 pl-10 rounded bg-gray-100 text-gray-500"
                 disabled
               />
@@ -111,8 +114,17 @@ export const EditPanel = ({ bookmark, onClose, onSave }: {
 
         {/* Topics Input */}
         <div className="mb-4">
-          <label className="flex items-center gap-2 mb-1 text-sm font-medium text-gray-700">
-            <Tag className="w-5 h-5" /> Topics
+          <label className="flex items-center justify-between mb-1 text-sm font-medium text-gray-700">
+            <div className="flex items-center gap-2">
+              <Tag className="w-5 h-5" /> Topics
+            </div>
+            <button
+              onClick={() => console.log('topics settings')}
+              className="text-gray-500 hover:text-gray-700 p-1 rounded hover:bg-gray-200 transition-colors"
+              title="Configure topics"
+            >
+              <Settings className="w-4 h-4" />
+            </button>
           </label>
           <ReactTags
             tags={edited.categories.topics.map((t, i) => ({
@@ -136,69 +148,78 @@ export const EditPanel = ({ bookmark, onClose, onSave }: {
 
         {/* Project Input */}
         <div className="mb-4">
-          <label className="flex items-center gap-2 mb-1 text-sm font-medium text-gray-700">
-            <Layers className="w-5 h-5" /> Project
-          </label>
-          <input
-            type="text"
-            value={edited.categories.project || ''}
-            onChange={(e) => setEdited({
-              ...edited,
-              categories: {
-                ...edited.categories,
-                project: e.target.value
-              }
-            })}
-            className="w-full p-2 rounded bg-gray-100 hover:bg-gray-200 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="Project name"
-          />
+          <div className="flex items-center justify-between">
+            <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
+              <Layers className="w-5 h-5" /> Project
+            </label>
+            <div className="flex items-center gap-2">
+              <input
+                type="text"
+                value={edited.categories.project || ''}
+                onChange={(e) => setEdited({
+                  ...edited,
+                  categories: {
+                    ...edited.categories,
+                    project: e.target.value
+                  }
+                })}
+                className="w-48 p-2 rounded bg-gray-100 hover:bg-gray-200 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="Project name"
+              />
+              <button
+                onClick={() => console.log('project settings')}
+                className="text-gray-500 hover:text-gray-700 p-1 rounded hover:bg-gray-200 transition-colors"
+                title="Configure projects"
+              >
+                <Settings className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
         </div>
 
         {/* Source Type */}
         <div className="mb-4">
-          <label className="flex items-center gap-2 mb-1 text-sm font-medium text-gray-700">
-            <BookmarkIcon className="w-5 h-5" /> Source Type
-          </label>
-          <select
-            value={edited.categories?.sourceType || ''}
-            onChange={(e) => setEdited({
-              ...edited,
-              categories: {
-                ...edited.categories,
-                sourceType: e.target.value as 'Blog'|'Article'|'Tool'|'Other'
-              }
-            })}
-            className="w-full p-2 rounded bg-gray-100 hover:bg-gray-200 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-          >
-            <option value="">Select type</option>
-            <option value="Blog">Blog</option>
-            <option value="Article">Article</option>
-            <option value="Tool">Tool</option>
-            <option value="Other">Other</option>
-          </select>
+          <div className="flex items-center justify-between">
+            <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
+              <BookmarkIcon className="w-5 h-5" /> Source
+            </label>
+            <select
+              value={edited.categories?.sourceType || ''}
+              onChange={(e) => setEdited({
+                ...edited,
+                categories: {
+                  ...edited.categories,
+                  sourceType: e.target.value as 'Blog'|'Article'|'Tool'|'Other'
+                }
+              })}
+              className="w-48 p-2 rounded bg-gray-100 hover:bg-gray-200 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              <option value="">Select type</option>
+              <option value="Blog">Blog</option>
+              <option value="Article">Article</option>
+              <option value="Tool">Tool</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
         </div>
 
         {/* Importance */}
         <div className="mb-4">
-          <label className="flex items-center gap-2 mb-1 text-sm font-medium text-gray-700">
-            <Star className="w-5 h-5" /> Importance
+          <label className="flex items-center justify-between mb-2 text-sm font-medium text-gray-700">
+            <div className="flex items-center gap-2">
+              <Star className="w-5 h-5" /> Importance
+            </div>
+            <StarRating
+              value={edited.categories?.importance}
+              onChange={(rating) => setEdited({
+                ...edited,
+                categories: {
+                  ...edited.categories,
+                  importance: rating
+                }
+              })}
+            />
           </label>
-          <select
-            value={edited.categories?.importance || ''}
-            onChange={(e) => setEdited({
-              ...edited,
-              categories: {
-                ...edited.categories,
-                importance: e.target.value as 'low'|'medium'|'high'
-              }
-            })}
-            className="w-full p-2 rounded bg-gray-100 hover:bg-gray-200 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-          >
-            <option value="">Select importance</option>
-            <option value="low">Low</option>
-            <option value="medium">Medium</option>
-            <option value="high">High</option>
-          </select>
         </div>
 
         <div className="flex justify-end gap-3 pt-4 mt-6 border-t border-gray-200">
@@ -218,6 +239,7 @@ export const EditPanel = ({ bookmark, onClose, onSave }: {
           </button>
         </div>
       </div>
+
     </motion.div>
   );
 };
