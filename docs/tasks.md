@@ -20,17 +20,19 @@ read common [guidelines and conventions](/guidelines.md) before starting
 **items**
 - [x] allow items to be deleted
 
-**FEAT: EditSidePanel**
+**FEAT: Item editing**
 - [x] (`plan`) based on specified [page fields](specs/model.md#page) describe how data will be stored in [local storage](specs/model.md#local-storage-json-format)
 - [x] (`plan`) draft [EditSidePanel](specs/ui.md#editsidepanel)
 - [x] proceed with [EditSidePanel](specs/ui.md#editsidepanel) component
+- [x] [`SPECS`] [`IMPL`] change importance to be 5 stars row instead of dropdown selector 
 
 > next
-**FEAT: CategoryConfModal**
+**FEAT: Categories picking, editing**
 - [x] [`specs`] define how categories will be handled (string, uuid) and stored in[local-storage](specs/model.md#local-storage-json-format).
 - [x] [`specs`] specify what will happen when user add, change, or delete category option in [category management](specs/feats.md#category-management) section
-- [ ] [`impl`] update Bookmark type interface to use ID-based categories structure
-- [ ] [`impl`] implement localStorage category options management (load/save/delete)  
-- [ ] [`impl`] implement CategoryConfModal with UUID generation and localStorage integration
+- [x] [`plan`] report any misalignment between current code impl and [data model](specs/model.md) and resync code with updated specs
 - [ ] [`impl`] update EditSidePanel to display category names from IDs and integrate with localStorage
 - [ ] [`impl`] implement category deletion with bulk bookmark updates
+- [ ] [UI](specs/ui.md#categorypicker)
+- [ ] [logic](specs/logic.md#categories-edition)
+- [ ] [model](specs/model.md#categories)

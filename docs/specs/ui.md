@@ -71,7 +71,8 @@ will propose various options for copying data:
 **actions**
 - **Undo button**: Reverts any modifications back to their original state. This button is disabled if there are no pending changes.
 - **Save Changes button**: Persists all edited fields to local storage. This button is also disabled when there are no changes to save.
-- **Category Configuration (⚙ icon)**: Available only for user-defined categories (Topics and Projects). Clicking opens [configuration interface](#category-configuration-modal) to manage available options for that category type.
+- **Category Selection**: Clicking Topic or Project fields opens [CategoryPicker](#categorypicker) modal for selection and management.
+- **Source Selection**: Clicking Source field opens [SourcePicker](#sourcepicker) modal for icon-based selection.
 
 **layout**
 
@@ -83,61 +84,123 @@ will propose various options for copying data:
 ║ │ [Globe]    https://example.com         │
 ║ │ [Calendar] 1/1/2025, 12:00:00 PM       │
 ║                                          ║
-║ ▼ Topics                             ⚙ ║
-║ │ +------------------------------------+ │
-║ │ | [tag1] x  [tag2] x                 | │
-║ │ | Add topic (press enter)            | │
-║ │ +------------------------------------+ │
+║ ▼ Topic                     [Finance]    ║
 ║                                          ║
-║ ▼ Project           [Project Name] ⚙    ║
+║ ▼ Project                   [Personal]   ║
 ║                                          ║
-║ ▼ Source            [Select type  ] [v] ║
+║ ▼ Source                    [PenTool]    ║
 ║                                          ║
 ║ ▼ Importance         ☆ ☆ ☆ ☆ ☆          ║
 ╟──────────────────────────────────────────╢
 ║                [ Undo ] [ Save Changes ] ║
 ╚══════════════════════════════════════════╝
 
-## Category Configuration Modal
+## CategoryPicker (`planned`)
+### Selection Mode (default):
 
 **component**
 
-[CategoryConfModal.tsx](/src/UI/CategoryConfModal.tsx)
+[CategoryPicker.tsx](/src/UI/CategoryPicker.tsx)
 
-**purpose**
-Manage available options for user-defined categories (`Topics` and `Projects`)
+**description**
 
-**behavior**
-- Opens as overlay modal when gear icon is clicked from [EditSidePanel](#edit-sidepanel) in front of user defined category
-- Shows current category options populated from [local storage](./model.md#local-storage-json-format) for specified category
-- Allows edit/delete existing options and adding new category options
-- Changes are saved immediately to local storage
-- Modal closes on outside click or close button
+Category's option selector opening as overlay modal when Topic or Project field is clicked from [EditSidePanel](#edit-sidepanel)
 
 **layout**
 
 ╔══════════════════════════════════════════╗
-║ Configure [Category Name]            [X] ║
+║ Select Topic                        [✏️] ║
 ╟──────────────────────────────────────────╢
-║ Current Options:                         ║
+║ [ Finance  ] [ DIY      ] [ Tech     ]   ║
+║ [ Shopping ] [ Personal ] [ Work     ]   ║
 ║                                          ║
-║ • Finance                           [×]  ║
-║ • DIY                               [×]  ║
-║ • DEV                               [×]  ║
-║ • TECH                              [×]  ║
-║ • Shopping                          [×]  ║
+║                              [ Close ]   ║
+╚══════════════════════════════════════════╝
+
+**purpose**
+- Category's option selector 
+- Add/edit/delete category options
+
+**behavior**
+- Opens as overlay modal when Topic or Project field is clicked from [EditSidePanel](#edit-sidepanel)
+- Toggled edit mode when user click pen
+- Changes are saved immediately to local storage
+- Modal closes on outside click, close button, or selection
+
+**actions**
+
+- **Click option**: Selects category and closes modal
+- **Click pen icon**: Switches to [edit mode](#edit-mode)
+- **Click selected option again**: Deselects category
+
+### Edit Mode:
+
+**description**
+
+Category's option editor when edit button is clicked from [Select](#selection-mode-default)
+
+**layout**
+
+╔══════════════════════════════════════════╗
+║ Edit Topics                         [✓] ║
+╟──────────────────────────────────────────╢
+║ [ Finance  ][×] [ DIY      ][×]          ║
+║ [ Tech     ][×] [ Shopping ][×]          ║
+║ [ Personal ][×] [ Work     ][×]          ║
 ║                                          ║
-║ ┌────────────────────────────────────┐   ║
-║ │ Add new option...                  │   ║
-║ └────────────────────────────────────┘   ║
+║ [ Type new topic...                  ]   ║
 ║                                          ║
 ║                              [ Close ]   ║
 ╚══════════════════════════════════════════╝
 
 **actions**
-- **[×] Delete**: Removes category option (with confirmation if used in existing bookmarks)
-- **Add new option field**: Press Enter to add new category option
-- **Close button**: Saves changes and closes modal
+- **Click existing tag**: [update option](logic.md#update-option)
+- **Click [×]**: [remove option](logic.md#remove-option)
+- **Type in text field and press enter**:  [add option](logic.md#add-option) (inline tag-style)
+- **Click checkmark**: Return to selection mode
+
+## SourcePicker (`planned`)
+
+**component**
+
+[SourcePicker.tsx](/src/UI/SourcePicker.tsx)
+
+**description**
+
+Icon-based compact picker (similar to color picker interface) displayed as overlay modal when source field is clicked from [EditSidePanel](#edit-sidepanel)
+ 
+**purpose**
+
+Allow picking unique prededefined source type
+
+**behavior**
+
+- only one source type pick allowed
+- hovering icon shows tooltip with textual source type
+- closes on outside click, close button, or selection
+
+**layout**
+
+```
++---------------------------+
+| Select Source Type        |
++---------------------------+
+|  [📝] [📰] [🔧] [❓]      |
+|  [👁] [💼] [🌐] [📚]      |  
+|  [📦]                     |
++---------------------------+
+```
+
+**Source Type Icons mapping:**
+- **Blog**: `PenTool`
+- **Article**: `Newspaper`  
+- **Tool**: `Wrench`
+- **Other**: `HelpCircle`
+- **Showcase**: `Eye`
+- **Portfolio**: `Briefcase`
+- **Site**: `Globe`
+- **Tutorial**: `BookOpen`
+- **Resource**: `Archive`
 
 ## Left Side Bar (LSB) (`draft`)
 
