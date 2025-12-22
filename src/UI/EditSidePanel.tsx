@@ -3,7 +3,7 @@ import { X, Tag, Layers, Globe, Calendar, Bookmark as BookmarkIcon, Star, Undo, 
 import { WithContext as ReactTags, type Tag as ReactTag } from 'react-tag-input';
 import { motion } from 'framer-motion';
 
-import type { Bookmark } from '../DropZone';
+import type { Bookmark } from '../Anynotes';
 import { StarRating } from './StarRating';
 
 export const EditSidePanel = ({ bookmark, onClose, onSave }: {

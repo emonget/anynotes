@@ -11,7 +11,7 @@ export const InstallBanner: React.FC<InstallBannerProps> = ({ isInstalled, bookm
       {!isInstalled ? (
         <>
           <div className="bg-gray-50 p-4 rounded-md border border-gray-300 mb-8 leading-relaxed">
-            <p className="font-bold mb-2">How to install the dropzone bookmarklet:</p>
+            <p className="font-bold mb-2">How to install the anynotes bookmarklet:</p>
             <ol className="list-decimal list-inside space-y-1">
               <li>
                 Drag the button below <strong>to your bookmarks bar</strong>.
@@ -27,7 +27,7 @@ export const InstallBanner: React.FC<InstallBannerProps> = ({ isInstalled, bookm
             className="select-none px-3 py-2 bg-blue-100 border border-blue-300 inline-block cursor-pointer no-underline text-blue-600 font-bold rounded mb-4 hover:bg-blue-200"
             title="Drag this link to your bookmarks bar"
           >
-            Save to dropzone
+            Save to anynotes
           </a>
         </>
       ) : (

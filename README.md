@@ -1,4 +1,4 @@
-# AnyDrop - Bookmarks Receiver, Random Pages Saver
+# Anynotes - Random Pages Saver
 ## Docs
 
 - [tasks](/docs/tasks.md)

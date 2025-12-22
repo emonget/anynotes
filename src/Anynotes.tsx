@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { AnimatePresence } from 'framer-motion';
 import { EditSidePanel } from './UI/EditSidePanel';
-import { DropdownMenu } from './UI/DropdownMenu';
+import { Toolbar } from './UI/Toolbar';
 import { BookmarkList } from './UI/BookmarkList';
 import { InstallBanner } from './UI/InstallBanner';
 
@@ -19,13 +19,13 @@ export interface Bookmark {
   categories: {
     topics: string[];
     project?: string;
-    sourceType?: 'Blog'|'Article'|'Tool'|'Other';
+    sourceType?: 'Blog' | 'Article' | 'Tool' | 'Other';
     importance?: number; // 1-5 stars
   };
   state: MatchingState;
 }
 
-export const DropZone = () => {
+export const Anynotes = () => {
   const [isPanelOpen, setIsPanelOpen] = useState(false);
   const [selectedBookmark, setSelectedBookmark] = useState<Bookmark | null>(null);
   const [bookmarks, setBookmarks] = useState<Bookmark[]>([]);
@@ -46,13 +46,13 @@ export const DropZone = () => {
   };
 
   useEffect(() => {
-    const installed = localStorage.getItem('dropzone-installed') === 'true';
+    const installed = localStorage.getItem('app-local-installation') === 'true';
     setIsInstalled(installed);
 
-    const confirmation = localStorage.getItem('dropzone-show-save-confirmation');
+    const confirmation = localStorage.getItem('app-save-confirmation');
     setShowSaveConfirmation(confirmation ? JSON.parse(confirmation) : true);
 
-    window.name = 'dropzone-sink';
+    window.name = 'anynotes-sink';
     loadBookmarks();
 
     const handleMessage = (event: MessageEvent) => {
@@ -62,10 +62,10 @@ export const DropZone = () => {
         const stored = localStorage.getItem('bookmarks') || '[]';
         let currentBookmarks = JSON.parse(stored);
         const timestamp = Date.now();
-        
+
         if (!currentBookmarks.some((b: Bookmark) => b.url === data.url)) {
-          const bookmarkData = { 
-            ...data, 
+          const bookmarkData = {
+            ...data,
             timestamp,
             categories: {
               topics: [],
@@ -80,13 +80,13 @@ export const DropZone = () => {
           console.log('Saved bookmark:', bookmarkData);
 
           if (event.source) {
-            const confirmation = localStorage.getItem('dropzone-show-save-confirmation');
+            const confirmation = localStorage.getItem('app-save-confirmation');
             const showConfirmation = confirmation ? JSON.parse(confirmation) : true;
             event.source.postMessage({ status: 'success', showConfirmation }, event.origin as any);
           }
-          
+
           if (!isInstalled) {
-            localStorage.setItem('dropzone-installed', 'true');
+            localStorage.setItem('app-local-installation', 'true');
             setIsInstalled(true);
           }
           setTimeout(() => window.close(), 300);
@@ -104,7 +104,7 @@ export const DropZone = () => {
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = 'dropzone-bookmarks.json';
+    a.download = 'anynotes-bookmarks.json';
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
@@ -148,23 +148,23 @@ export const DropZone = () => {
   const bookmarkletRef = useRef<HTMLAnchorElement>(null);
 
   useEffect(() => {
-    const dropzoneUrl = window.location.href;
+    const anynotesUrl = window.location.href;
     const bookmarkletCode = `javascript:(() => {
     const data = {
         title: document.title,
         url: location.href
     };
 
-    const receiver = window.open('${dropzoneUrl}', 'dropzone-sink');
+    const receiver = window.open('${anynotesUrl}', 'anynotes-sink');
     if (!receiver) {
-        alert('Could not open dropzone. Is popup blocked?');
+        alert('Could not open Anynotes. Is popup blocked?');
         return;
     }
 
     const messageListener = (event) => {
         if (event.source === receiver && event.data.status === 'success') {
             if (event.data.showConfirmation) {
-                alert('Bookmark saved to Dropzone!');
+                alert('Bookmark saved to Anynotes!');
             }
             window.removeEventListener('message', messageListener);
         }
@@ -204,7 +204,7 @@ export const DropZone = () => {
   const handleClearData = () => {
     if (window.confirm('Are you sure you want to clear all data? This action cannot be undone.')) {
       localStorage.removeItem('bookmarks');
-      localStorage.removeItem('dropzone-installed');
+      localStorage.removeItem('app-local-installation');
       setBookmarks([]);
       setIsInstalled(false);
       setShowConfig(false);
@@ -214,50 +214,50 @@ export const DropZone = () => {
   return (
     <>
       <div className="font-sans max-w-3xl mx-auto mt-8 px-4 text-gray-800">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-blue-600 text-3xl font-bold">DropZone</h1>
-                <DropdownMenu
-          showConfig={showConfig}
-          setShowConfig={setShowConfig}
-          handleImport={handleImport}
-          handleExport={handleExport}
-          handleClearData={handleClearData}
-          showSaveConfirmation={showSaveConfirmation}
-          setShowSaveConfirmation={setShowSaveConfirmation}
+        <div className="flex justify-between items-center mb-6">
+          <h1 className="text-blue-600 text-3xl font-bold">Anynotes</h1>
+          <Toolbar
+            showConfig={showConfig}
+            setShowConfig={setShowConfig}
+            handleImport={handleImport}
+            handleExport={handleExport}
+            handleClearData={handleClearData}
+            showSaveConfirmation={showSaveConfirmation}
+            setShowSaveConfirmation={setShowSaveConfirmation}
+          />
+        </div>
+
+        <InstallBanner isInstalled={isInstalled} bookmarkletRef={bookmarkletRef} />
+
+        <BookmarkList
+          bookmarks={bookmarks}
+          handleDelete={handleDelete}
+          onSelectBookmark={handleSelectBookmark}
         />
+
       </div>
-
-      <InstallBanner isInstalled={isInstalled} bookmarkletRef={bookmarkletRef} />
-
-            <BookmarkList
-        bookmarks={bookmarks}
-        handleDelete={handleDelete}
-        onSelectBookmark={handleSelectBookmark}
-      />
-
-    </div>
-    <AnimatePresence>
-      {isPanelOpen && selectedBookmark && (
-        <EditSidePanel
-          bookmark={{
-            ...selectedBookmark,
-            state: selectedBookmark.state || MatchingState.Overridden
-          }}
-          onClose={() => setIsPanelOpen(false)}
-          onSave={(updated) => {
-            if (!updated.id) return;
-            const updatedBookmarks = [...bookmarks];
-            const index = parseInt(updated.id, 10);
-            if (!isNaN(index) && index >= 0 && index < updatedBookmarks.length) {
-              const { id, ...bookmarkToSave } = updated;
-              updatedBookmarks[index] = bookmarkToSave;
-            }
-            saveBookmarks(updatedBookmarks);
-            setSelectedBookmark(null);
-          }}
-        />
-      )}
-    </AnimatePresence>
+      <AnimatePresence>
+        {isPanelOpen && selectedBookmark && (
+          <EditSidePanel
+            bookmark={{
+              ...selectedBookmark,
+              state: selectedBookmark.state || MatchingState.Overridden
+            }}
+            onClose={() => setIsPanelOpen(false)}
+            onSave={(updated) => {
+              if (!updated.id) return;
+              const updatedBookmarks = [...bookmarks];
+              const index = parseInt(updated.id, 10);
+              if (!isNaN(index) && index >= 0 && index < updatedBookmarks.length) {
+                const { id, ...bookmarkToSave } = updated;
+                updatedBookmarks[index] = bookmarkToSave;
+              }
+              saveBookmarks(updatedBookmarks);
+              setSelectedBookmark(null);
+            }}
+          />
+        )}
+      </AnimatePresence>
     </>
   );
 };

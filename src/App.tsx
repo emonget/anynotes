@@ -1,10 +1,10 @@
 import './App.css'
-import { DropZone } from './DropZone'
+import { Anynotes } from './Anynotes'
 
 function App() {
 
   return <>
-    <DropZone />
+    <Anynotes />
   </>
 }
 

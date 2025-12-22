@@ -62,7 +62,7 @@ export const DropdownMenu: React.FC<DropdownMenuProps> = ({
               checked={showSaveConfirmation}
               onChange={(e) => {
                 setShowSaveConfirmation(e.target.checked);
-                localStorage.setItem('dropzone-show-save-confirmation', JSON.stringify(e.target.checked));
+                localStorage.setItem('app-save-confirmation', JSON.stringify(e.target.checked));
               }}
               className="mr-2"
             />

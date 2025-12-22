@@ -1,6 +1,6 @@
 import React from 'react';
 import { Trash2 } from 'lucide-react';
-import type { Bookmark } from '../DropZone';
+import type { Bookmark } from '../Anynotes';
 
 interface BookmarkListProps {
   bookmarks: Bookmark[];
