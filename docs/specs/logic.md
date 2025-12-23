@@ -1,4 +1,11 @@
 # Logic side
+## Copy/paste
+### Copy
+copy content from local storage into clipboard as json
+
+### Paste
+paste content from clipboard and override data in localstorage 
+
 ## Categories edition
 ### Add option
 - Generate UUID for new option

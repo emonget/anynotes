@@ -2,7 +2,7 @@
 ## Install banner
 * position: top middle 
 
-## Search + filter bar
+## Search + filter bar (`draft`)
 Filtering/search items from the list
 * position: top middle
 * elements: [search-field](#search-field) + [search-filters](#search-filters)
@@ -25,11 +25,11 @@ Showing visible items as a list
 
 ### Copy button
 - **Icon**: ⎘
-- **Action**: Shows [copy-modal](#copy-modal)
+- **Action**: [copy logic](logic.md#copy) 
 
 ### Paste button
 - **Icon**: ⎙
-- **Action**: Imports from clipboard
+- **Action**: [paste logic](logic.md#paste)
 
 ### Settings button
 - **Icon**: ⚙
@@ -42,7 +42,7 @@ Showing visible items as a list
 3. `[Admin Panel](#adminpanel)`
 4. `[Preferences](#preferences)`
 
-## Copy modal
+## Copy modal (`draft`)
 
 will propose various options for copying data:
 - `Notion/`: CSV data that can be imported within notion as table

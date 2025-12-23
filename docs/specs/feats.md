@@ -6,14 +6,14 @@
 After first use, [settings field](model.md#local-storage-json-format) is initialized in local storage, 
 and [install](#install) will be replaced with [query](#query).
 
-## Copy
+## Copy to clipboard
 [copy button](ui.md#top-right-toolbar)
 
 This will copy data from local storage to clipboard.
 
 By default, output format is `JSON`, so depending on target, user may have to manually convert data to target's format (for instance from `JSON` to `CSV`)
 
-## Paste
+## Paste from clipboard
 [paste button](ui.md#top-right-toolbar)
 
 This will paste date from clipboard into the app.
@@ -29,9 +29,9 @@ Querying specific items
 
 [filter/search bar](ui.md#)
 
-## Sort
+## Auto-match
 
-[sorting specs](sorting.md)
+[sorting specs](match.md)
 
 ## Manage
 
